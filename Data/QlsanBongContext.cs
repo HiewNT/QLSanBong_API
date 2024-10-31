@@ -41,7 +41,7 @@ public partial class QlsanBongContext : DbContext
     {
         modelBuilder.Entity<ChiTietPd>(entity =>
         {
-            entity.HasKey(e => new { e.MaPds, e.MaGio }).HasName("PK__ChiTietP__3AE048CAA0E04E9B");
+            entity.HasKey(e => new { e.MaPds, e.MaSb, e.MaGio, e.Ngaysudung }).HasName("PK__ChiTietP__3AE048CAA0E04E9B");
 
             entity.ToTable("ChiTietPDS");
 
@@ -49,11 +49,14 @@ public partial class QlsanBongContext : DbContext
                 .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("MaPDS");
+            entity.Property(e => e.MaSb)
+                .HasMaxLength(8)
+                .IsUnicode(false)
+                .HasColumnName("MaSB");
             entity.Property(e => e.MaGio)
                 .HasMaxLength(8)
                 .IsUnicode(false);
             entity.Property(e => e.Ghichu).HasMaxLength(100);
-            entity.Property(e => e.Giatien).HasColumnType("decimal(18, 0)");
 
             entity.HasOne(d => d.MaGioNavigation).WithMany(p => p.ChiTietPds)
                 .HasForeignKey(d => d.MaGio)
@@ -62,29 +65,35 @@ public partial class QlsanBongContext : DbContext
 
             entity.HasOne(d => d.MaPdsNavigation).WithMany(p => p.ChiTietPds)
                 .HasForeignKey(d => d.MaPds)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ChiTietPDS_PhieuDatSan");
+
+            entity.HasOne(d => d.MaSbNavigation).WithMany(p => p.ChiTietPds)
+                .HasForeignKey(d => d.MaSb)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ChiTietPDS_SanBong");
         });
 
         modelBuilder.Entity<ChiTietYcd>(entity =>
         {
-            entity.HasKey(e => new { e.Stt, e.MaSb });
+            entity.HasKey(e => new { e.Stt, e.MaSb, e.Magio, e.Ngaysudung });
 
             entity.ToTable("ChiTietYCDS");
 
-            entity.Property(e => e.Stt)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("STT");
+            entity.Property(e => e.Stt).HasColumnName("STT");
             entity.Property(e => e.MaSb)
                 .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("MaSB");
-            entity.Property(e => e.GhiChu).HasMaxLength(200);
-            entity.Property(e => e.GiaTien).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Magio)
                 .HasMaxLength(8)
                 .IsUnicode(false);
+            entity.Property(e => e.GhiChu).HasMaxLength(200);
             entity.Property(e => e.TrangThai).HasMaxLength(50);
+
+            entity.HasOne(d => d.MaSbNavigation).WithMany(p => p.ChiTietYcds)
+                .HasForeignKey(d => d.MaSb)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ChiTietYCDS_SanBong");
 
             entity.HasOne(d => d.MagioNavigation).WithMany(p => p.ChiTietYcds)
                 .HasForeignKey(d => d.Magio)
@@ -93,7 +102,6 @@ public partial class QlsanBongContext : DbContext
 
             entity.HasOne(d => d.SttNavigation).WithMany(p => p.ChiTietYcds)
                 .HasForeignKey(d => d.Stt)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ChiTietYCDS_YeuCauDatSan");
         });
 
@@ -186,16 +194,8 @@ public partial class QlsanBongContext : DbContext
                 .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("MaNV");
-            entity.Property(e => e.MaSb)
-                .HasMaxLength(8)
-                .IsUnicode(false)
-                .HasColumnName("MaSB");
             entity.Property(e => e.Ngaylap).HasColumnType("datetime");
             entity.Property(e => e.Phuongthuctt).HasMaxLength(50);
-            entity.Property(e => e.Sdt)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("SDT");
             entity.Property(e => e.Sttds).HasColumnName("sttds");
             entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
 
@@ -208,11 +208,6 @@ public partial class QlsanBongContext : DbContext
                 .HasForeignKey(d => d.MaNv)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PhieuDatSan_NhanVien");
-
-            entity.HasOne(d => d.MaSbNavigation).WithMany(p => p.PhieuDatSans)
-                .HasForeignKey(d => d.MaSb)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PhieuDatSan_SanBong");
         });
 
         modelBuilder.Entity<SanBong>(entity =>
@@ -228,9 +223,6 @@ public partial class QlsanBongContext : DbContext
             entity.Property(e => e.DiaChi).HasColumnType("ntext");
             entity.Property(e => e.Dientich).HasMaxLength(20);
             entity.Property(e => e.Ghichu).HasColumnType("ntext");
-            entity.Property(e => e.Hinhanh)
-                .HasMaxLength(500)
-                .IsUnicode(false);
             entity.Property(e => e.TenSb)
                 .HasMaxLength(30)
                 .HasColumnName("TenSB");
@@ -261,14 +253,17 @@ public partial class QlsanBongContext : DbContext
 
             entity.Property(e => e.Stt).HasColumnName("STT");
             entity.Property(e => e.GhiChu).HasMaxLength(50);
-            entity.Property(e => e.Phuongthuctt).HasMaxLength(50);
-            entity.Property(e => e.Sdt)
-                .HasMaxLength(20)
+            entity.Property(e => e.MaKh)
+                .HasMaxLength(8)
                 .IsUnicode(false)
-                .HasColumnName("SDT");
-            entity.Property(e => e.Tennguoidat).HasMaxLength(30);
+                .HasColumnName("MaKH");
             entity.Property(e => e.Thoigiandat).HasColumnType("datetime");
             entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
+
+            entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.YeuCauDatSans)
+                .HasForeignKey(d => d.MaKh)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_YeuCauDatSan_KhachHang");
         });
 
         OnModelCreatingPartial(modelBuilder);

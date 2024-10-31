@@ -20,4 +20,6 @@ public partial class KhachHang
     public virtual ICollection<PhieuDatSan> PhieuDatSans { get; set; } = new List<PhieuDatSan>();
 
     public virtual TaiKhoan TendangnhapNavigation { get; set; } = null!;
+
+    public virtual ICollection<YeuCauDatSan> YeuCauDatSans { get; set; } = new List<YeuCauDatSan>();
 }

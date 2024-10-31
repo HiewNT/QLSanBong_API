@@ -17,5 +17,7 @@ public partial class SanBong
 
     public string? DiaChi { get; set; }
 
-    public virtual ICollection<PhieuDatSan> PhieuDatSans { get; set; } = new List<PhieuDatSan>();
+    public virtual ICollection<ChiTietPd> ChiTietPds { get; set; } = new List<ChiTietPd>();
+
+    public virtual ICollection<ChiTietYcd> ChiTietYcds { get; set; } = new List<ChiTietYcd>();
 }

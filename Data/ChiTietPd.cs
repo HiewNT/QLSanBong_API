@@ -9,17 +9,15 @@ public partial class ChiTietPd
 
     public string MaGio { get; set; } = null!;
 
-    public DateOnly? Ngaysudung { get; set; }
+    public string MaSb { get; set; } = null!;
 
-    public decimal? Giatien { get; set; }
+    public DateOnly Ngaysudung { get; set; }
 
     public string? Ghichu { get; set; }
-
-    public TimeOnly? Giobatdau { get; set; }
-
-    public TimeOnly? Gioketthuc { get; set; }
 
     public virtual GiaGioThue MaGioNavigation { get; set; } = null!;
 
     public virtual PhieuDatSan MaPdsNavigation { get; set; } = null!;
+
+    public virtual SanBong MaSbNavigation { get; set; } = null!;
 }

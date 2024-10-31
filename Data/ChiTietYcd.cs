@@ -11,17 +11,13 @@ public partial class ChiTietYcd
 
     public string Magio { get; set; } = null!;
 
-    public DateOnly? Ngaysudung { get; set; }
-
-    public TimeOnly? Giobatdau { get; set; }
-
-    public TimeOnly? Gioketthuc { get; set; }
-
-    public decimal? GiaTien { get; set; }
+    public DateOnly Ngaysudung { get; set; }
 
     public string? TrangThai { get; set; }
 
     public string? GhiChu { get; set; }
+
+    public virtual SanBong MaSbNavigation { get; set; } = null!;
 
     public virtual GiaGioThue MagioNavigation { get; set; } = null!;
 
